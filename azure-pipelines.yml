@@ -42,7 +42,6 @@ steps:
 # for feature/bugfix branches update the package version
 # and tag the git repo
 - script: |
-    node -p "require('./package.json').version"
     git config user.email pipeline@dev.azure.com
     git config user.name build-pipeline
     VERSION=`npm version pre --no-git-tag-version --preid=beta`
