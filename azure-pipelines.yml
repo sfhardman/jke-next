@@ -34,10 +34,10 @@ steps:
 
 # npmAuthenticate is being used because the npm publish 
 # task doesn't handle tags
-- task: npmAuthenticate@0
-  inputs:
-    workingFile: .npmrc
-    customEndpoint: 'npmjs.org'
+# - task: npmAuthenticate@0
+#   inputs:
+#     workingFile: .npmrc
+#     customEndpoint: 'npmjs.org'
 
 # for feature/bugfix branches update the package version
 # and tag the git repo
