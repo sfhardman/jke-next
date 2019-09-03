@@ -28,7 +28,7 @@ steps:
   # persistCredentials so we can push tags to the remote repo
   persistCredentials: true
 
-- script: printenv
+- script: printenv | grep BUILD_
 
 # npmAuthenticate task expects an npmrc file to exist
 - script: echo "registry=https://registry.npmjs.org/" > .npmrc
