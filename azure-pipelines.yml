@@ -45,9 +45,9 @@ steps:
     node -p "require('./package.json').version"
     git config user.email pipeline@dev.azure.com
     git config user.name build-pipeline
-    VERSION=`npm version prerelease --no-git-tag-version --preid=beta`
+    VERSION=`npm version pre --no-git-tag-version --preid=beta`
     while git rev-parse "$VERSION" >/dev/null 2>&1; do
-      VERSION=`npm version prerelease --no-git-tag-version --preid=beta`
+      VERSION=`npm version pre --no-git-tag-version --preid=beta`
     done
   displayName: 'increment version'
   condition: and(succeeded(), ne(variables['Build.SourceBranch'], variables.master_branch))
