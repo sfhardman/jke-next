@@ -1,7 +1,7 @@
 # The variables are here to enable testing of the pipeline
 variables:
  # set this to another branch when testing prod/master releases
- master_branch: refs/heads/feature/master
+ master_branch: refs/heads/master
  # set this to "prerelease" when testing prod/master releases
  master_tag: latest
 
@@ -42,6 +42,7 @@ steps:
 # for feature/bugfix branches update the package version
 # and tag the git repo
 - script: |
+    node -p "require('./package.json').version"
     git config user.email pipeline@dev.azure.com
     git config user.name build-pipeline
     VERSION=`npm version prerelease --no-git-tag-version --preid=beta`
@@ -73,17 +74,17 @@ steps:
     npm run test
   displayName: 'npm test'
 
-# for feature/bugfix branches publish with a beta tag
-- script: npm publish --tag=beta
-  displayName: 'npm publish beta'
-  condition: and(succeeded(), ne(variables['Build.SourceBranch'], variables.master_branch))
+# # for feature/bugfix branches publish with a beta tag
+# - script: npm publish --tag=beta
+#   displayName: 'npm publish beta'
+#   condition: and(succeeded(), ne(variables['Build.SourceBranch'], variables.master_branch))
 
-# for master branch publish with latest tag
-- script: npm publish --tag=$MASTER_TAG
-  displayName: npm publish $(master_tag)
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], variables.master_branch))
+# # for master branch publish with latest tag
+# - script: npm publish --tag=$MASTER_TAG
+#   displayName: npm publish $(master_tag)
+#   condition: and(succeeded(), eq(variables['Build.SourceBranch'], variables.master_branch))
 
-# update tags on remote repo
-- script: |
-    git push --tags
-  displayName: 'push to GitHub'
+# # update tags on remote repo
+# - script: |
+#     git push --tags
+#   displayName: 'push to GitHub'
