@@ -18,10 +18,10 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-# - task: NodeTool@0
-#   inputs:
-#     versionSpec: '10.x'
-#   displayName: 'Install Node.js'
+- task: NodeTool@0
+  inputs:
+    versionSpec: '10.x'
+  displayName: 'Install Node.js'
 
 - checkout: self
   clean: true
@@ -38,10 +38,10 @@ steps:
 
 # npmAuthenticate is being used because the npm publish 
 # task doesn't handle tags
-# - task: npmAuthenticate@0
-#   inputs:
-#     workingFile: .npmrc
-#     customEndpoint: 'npmjs.org'
+- task: npmAuthenticate@0
+  inputs:
+    workingFile: .npmrc
+    customEndpoint: 'npmjs.org'
 
 # for feature/bugfix branches update the package version
 # and tag the git repo
@@ -65,23 +65,22 @@ steps:
 #     git tag -f $VERSION
 #   displayName: tag version
 
-# - script: |
-#     npm install
-#     npm run build
-#   displayName: 'npm install'
+- script: |
+    npm install
+    npm run build
+  displayName: 'npm install'
 
-# - script: |
-#    npm run build
-#   displayName: 'npm build'
+- script: |
+   npm run build
+  displayName: 'npm build'
 
-# - script: |
-#     npm run test
-#   displayName: 'npm test'
+- script: |
+    npm run test
+  displayName: 'npm test'
 
-# # for feature/bugfix branches publish with a beta tag
-# - script: npm publish --tag=beta
-#   displayName: 'npm publish beta'
-#   condition: and(succeeded(), ne(variables['Build.SourceBranch'], variables.master_branch))
+# for feature/bugfix branches publish with a beta tag
+- script: npm publish --tag=beta
+  displayName: 'npm publish beta'
 
 # # for master branch publish with latest tag
 # - script: npm publish --tag=$MASTER_TAG
