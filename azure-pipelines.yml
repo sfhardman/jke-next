@@ -32,7 +32,13 @@ steps:
     echo FORKFORKFORK
     git rev-parse HEAD
     git remote -v
-    git status
+    git config user.email pipeline@dev.azure.com
+    git config user.name build-pipeline
+    git checkout master
+    git touch fork.fork
+    git add .
+    git commit -m "FORKFORK"
+    git push
     printenv | grep BUILD_
 
 # npmAuthenticate task expects an npmrc file to exist
