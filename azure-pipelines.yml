@@ -45,14 +45,15 @@ steps:
 
 # for feature/bugfix branches update the package version
 # and tag the git repo
-# - script: |
-#     git config user.email pipeline@dev.azure.com
-#     git config user.name build-pipeline
-#     VERSION=`npm version pre --no-git-tag-version --preid=beta`
-#     while git rev-parse "$VERSION" >/dev/null 2>&1; do
-#       VERSION=`npm version pre --no-git-tag-version --preid=beta`
-#     done
-#   displayName: 'increment version'
+- script: |
+    git config user.email pipeline@dev.azure.com
+    git config user.name build-pipeline
+    VERSION=`npm version pre --no-git-tag-version --preid=beta`
+    while git rev-parse "$VERSION" >/dev/null 2>&1; do
+      VERSION=`npm version pre --no-git-tag-version --preid=beta`
+    done
+    git tag -f $VERSION
+  displayName: 'increment version'
 #   condition: and(succeeded(), ne(variables['Build.SourceBranch'], variables.master_branch))
 
 # for master branch tag the git repo for the existing package version
@@ -87,7 +88,7 @@ steps:
 #   displayName: npm publish $(master_tag)
 #   condition: and(succeeded(), eq(variables['Build.SourceBranch'], variables.master_branch))
 
-# # update tags on remote repo
-# - script: |
-#     git push --tags
-#   displayName: 'push to GitHub'
+# update tags on remote repo
+- script: |
+    git push --tags
+  displayName: 'push to GitHub'
