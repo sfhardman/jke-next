@@ -37,7 +37,9 @@ steps:
     git checkout master
     touch fork.fork
     git add .
+    echo 1
     git commit -m "FORKFORK"
+    echo 2
     git push
     printenv | grep BUILD_
 
