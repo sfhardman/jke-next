@@ -29,6 +29,7 @@ steps:
   persistCredentials: true
 
 - script: |
+    echo FORKFORKFORK
     git rev-parse HEAD
     printenv | grep BUILD_
 
