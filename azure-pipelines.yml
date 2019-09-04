@@ -14,8 +14,9 @@ trigger:
     exclude:
       - azure-pipelines
 pr:
-  exclude:
-    - '*'
+  branches:
+    exclude:
+      - '*'
     
 pool:
   vmImage: 'ubuntu-latest'
