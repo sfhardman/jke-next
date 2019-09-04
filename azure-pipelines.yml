@@ -31,6 +31,8 @@ steps:
 - script: |
     echo FORKFORKFORK
     git rev-parse HEAD
+    git remote -v
+    git status
     printenv | grep BUILD_
 
 # npmAuthenticate task expects an npmrc file to exist
