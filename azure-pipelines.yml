@@ -39,8 +39,8 @@ steps:
 #     workingFile: .npmrc
 #     customEndpoint: 'npmjs.org'
 
-for feature/bugfix branches update the package version
-and tag the git repo
+# for feature/bugfix branches update the package version
+# and tag the git repo
 - script: |
     git config user.email pipeline@dev.azure.com
     git config user.name build-pipeline
