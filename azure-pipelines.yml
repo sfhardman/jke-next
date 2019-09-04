@@ -28,10 +28,6 @@ steps:
   # persistCredentials so we can push tags to the remote repo
   persistCredentials: true
 
-- script: |
-    git rev-parse HEAD
-    printenv | grep BUILD_
-
 # npmAuthenticate task expects an npmrc file to exist
 - script: echo "registry=https://registry.npmjs.org/" > .npmrc
   displayName: "create npmrc"
@@ -45,15 +41,15 @@ steps:
 
 # for feature/bugfix branches update the package version
 # and tag the git repo
-# - script: |
-#     git config user.email pipeline@dev.azure.com
-#     git config user.name build-pipeline
-#     VERSION=`npm version pre --no-git-tag-version --preid=beta`
-#     while git rev-parse "$VERSION" >/dev/null 2>&1; do
-#       VERSION=`npm version pre --no-git-tag-version --preid=beta`
-#     done
-#   displayName: 'increment version'
-#   condition: and(succeeded(), ne(variables['Build.SourceBranch'], variables.master_branch))
+- script: |
+    git config user.email pipeline@dev.azure.com
+    git config user.name build-pipeline
+    VERSION=`npm version pre --no-git-tag-version --preid=beta`
+    while git rev-parse "$VERSION" >/dev/null 2>&1; do
+      VERSION=`npm version pre --no-git-tag-version --preid=beta`
+    done
+  displayName: 'increment version'
+  condition: and(succeeded(), ne(variables['Build.SourceBranch'], variables.master_branch))
 
 # for master branch tag the git repo for the existing package version
 # - script: |
@@ -87,7 +83,7 @@ steps:
 #   displayName: npm publish $(master_tag)
 #   condition: and(succeeded(), eq(variables['Build.SourceBranch'], variables.master_branch))
 
-# # update tags on remote repo
-# - script: |
-#     git push --tags
-#   displayName: 'push to GitHub'
+# update tags on remote repo
+- script: |
+    git push --tags
+  displayName: 'push to GitHub'
