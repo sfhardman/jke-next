@@ -1,8 +1,7 @@
 trigger:
   branches:
     include:
-      - feature/*
-      - bugfix/*
+      - master
 
 # not triggered by pull requests
 # (these might come from a forked repo)
@@ -22,19 +21,25 @@ steps:
   # persistCredentials so we can push tags to the remote repo
   persistCredentials: true
 
+# npmAuthenticate task expects an npmrc file to exist
+- script: echo "registry=https://registry.npmjs.org/" > .npmrc
+  displayName: "create npmrc"
 
-# update the package version and tag the git repo
+# npmAuthenticate is being used because the npm publish 
+# task doesn't handle tags
+- task: npmAuthenticate@0
+  inputs:
+    workingFile: .npmrc
+    customEndpoint: 'npmjs'
+
+# tag the git repo for the existing package version
 - script: |
     git config user.email pipeline@dev.azure.com
     git config user.name build-pipeline
-    VERSION=`npm version pre --no-git-tag-version --preid=beta`
-    while git rev-parse "$VERSION" >/dev/null 2>&1; do
-      VERSION=`npm version pre --no-git-tag-version --preid=beta`
-    done
+    VERSION=v`node -p "require('./package.json').version"`
     echo "Version: $VERSION"
-    git tag -f $VERSION
-  displayName: 'increment version'
-
+    git tag $VERSION
+  displayName: tag version
 
 - script: |
     npm install
@@ -50,8 +55,8 @@ steps:
   displayName: 'npm test'
 
 # for feature/bugfix branches publish with a beta tag
-- script: npm publish --tag=beta
-  displayName: 'npm publish beta'
+- script: npm publish
+  displayName: 'npm publish'
 
 # update tags on remote repo
 - script: |
