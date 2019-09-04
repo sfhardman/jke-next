@@ -18,10 +18,10 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: '10.x'
-  displayName: 'Install Node.js'
+# - task: NodeTool@0
+#   inputs:
+#     versionSpec: '10.x'
+#   displayName: 'Install Node.js'
 
 - checkout: self
   clean: true
@@ -45,37 +45,37 @@ steps:
 
 # for feature/bugfix branches update the package version
 # and tag the git repo
-- script: |
-    git config user.email pipeline@dev.azure.com
-    git config user.name build-pipeline
-    VERSION=`npm version pre --no-git-tag-version --preid=beta`
-    while git rev-parse "$VERSION" >/dev/null 2>&1; do
-      VERSION=`npm version pre --no-git-tag-version --preid=beta`
-    done
-  displayName: 'increment version'
-  condition: and(succeeded(), ne(variables['Build.SourceBranch'], variables.master_branch))
+# - script: |
+#     git config user.email pipeline@dev.azure.com
+#     git config user.name build-pipeline
+#     VERSION=`npm version pre --no-git-tag-version --preid=beta`
+#     while git rev-parse "$VERSION" >/dev/null 2>&1; do
+#       VERSION=`npm version pre --no-git-tag-version --preid=beta`
+#     done
+#   displayName: 'increment version'
+#   condition: and(succeeded(), ne(variables['Build.SourceBranch'], variables.master_branch))
 
 # for master branch tag the git repo for the existing package version
-- script: |
-    git config user.email pipeline@dev.azure.com
-    git config user.name build-pipeline
-    VERSION=v`node -p "require('./package.json').version"`
-    echo "Version: $VERSION"
-    git tag -f $VERSION
-  displayName: tag version
+# - script: |
+#     git config user.email pipeline@dev.azure.com
+#     git config user.name build-pipeline
+#     VERSION=v`node -p "require('./package.json').version"`
+#     echo "Version: $VERSION"
+#     git tag -f $VERSION
+#   displayName: tag version
 
-- script: |
-    npm install
-    npm run build
-  displayName: 'npm install'
+# - script: |
+#     npm install
+#     npm run build
+#   displayName: 'npm install'
 
-- script: |
-   npm run build
-  displayName: 'npm build'
+# - script: |
+#    npm run build
+#   displayName: 'npm build'
 
-- script: |
-    npm run test
-  displayName: 'npm test'
+# - script: |
+#     npm run test
+#   displayName: 'npm test'
 
 # # for feature/bugfix branches publish with a beta tag
 # - script: npm publish --tag=beta
